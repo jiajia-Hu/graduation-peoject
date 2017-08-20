@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" 
+ 				 xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4 " >
+ 	<head  th:substituteby ="include/link"></head>
+ 	<script th:src="@{/js/index.js}"></script>
+  	<body class="overflow-hidden">
+		<div class="wrapper preload">
+			<div th:substituteby ="include/header :: #top_header"></div>
+			<div class="main-container sidebar-mini">
+				<div class="padding-md" style="margin-left: 17%;width: 66%">
+					<h3 class="header-text m-top-lg">
+						最新动态
+					</h3>
+
+					<div class="row">
+						<div class="col-md-8">
+							<div class="blog-wrapper">
+								<div class="blog-list" th:each="article,articleState : ${articles}" th:style="${articleState.index>9?'display:none;':''}" th:id="'div'+${articleState.index}">
+									<div class="blog-header clearfix m-bottom-md">
+										<div class="blog-date" >
+											<span th:text="${#calendars.format(article.publishDate,'dd')}"></span><br/>
+											<div class="blog-month" th:text="${#calendars.format(article.publishDate,'MMM')}"></div>
+										</div>
+
+										<div class="blog-title">
+											<a class="text-upper" th:href="@{'/article/single/'+${article.id}}"  th:text="${article.title}">title</a>
+
+											<div class="text-muted font-12">
+												作者: <a th:href="@{'/user/profile/'+${article.author}}" th:text="${article.authorName}">John Doe</a>
+												来自话题: <a th:href="@{'/topic/'+ ${article.topic}}" th:text="${article.topicName}">Technology</a>
+												<span class="m-left-xs m-right-xs">|</span>
+												<span><i class="fa fa-comments"></i> <span th:text="${article.comments}"> </span> 条评论</span>
+											</div>
+											<div class="text-muted font-12">
+												<span th:text="${article.likeNum}"></span><span> 人❤这个问题</span>
+											</div>
+										</div>
+									</div><!-- ./blog-header -->
+									<div class="article_title"  >
+										<img  th:src="@{'/image/title/'+${article.id}}" style="height: 300px;width: 90%"/>
+									</div>
+									<!-- <p class="m-top-lg	RichText" style="width: 90%" th:text="${article.content}" name="content">
+										content
+									</p> -->
+
+									<div class="m-top-md">
+										<a th:if="${session.user} != null" th:href="@{'/article/single/'+${article.id}}" class="btn btn-info text-upper">查看详情</a>
+										<a th:if="${session.user} == null" th:href="@{/signin}" class="btn btn-info text-upper">查看详情</a>
+									</div>
+									<hr />
+								</div><!-- ./blog-list -->
+								<button class="col-md-11 btn btn-success text-upper" th:if="${articles.size()>=10}" onclick="showMore()" id="showMoreBtn">显示更多...</button>
+								
+							</div>
+						</div><!-- ./col -->
+						<div class="col-md-4">
+							<ul class="linopoint">
+								<li><a th:href="@{/user/collect}" class="zm-side-nav-link"><i class="zg-icon zg-icon-sidenav-fav"></i>我的收藏</a></li>
+								<li><a th:href="@{/topic/follow}" class="zm-side-nav-link"><i class="zg-icon zg-icon-sidenav-follow"></i>我关注的话题</a></li>
+								<li><a th:href="@{/article/inviteme}" class="zm-side-nav-link"><i class="zg-icon zg-icon-sidenav-invite"></i>邀请我回答的问题</a></li>
+							</ul>
+							<hr/>
+
+							<h4 >热门☼文章</h4>
+							<ul class="popular-blog-post">
+								<li class="clearfix"  th:each="article,articleState : ${article24Hot}" >
+									<div class="img-wrapper clearfix">
+										<img th:src="@{'/image/title/'+${article.id}}" alt=""/>
+									</div>
+									<div class="popular-blog-detail">
+										<a th:href="@{'/article/single/'+${article.id}}" class="h5" th:text="${article.title}">title</a>
+										<div class="text-muted m-top-sm"  th:text="${#calendars.format(article.publishDate,'yyyy年MM月dd日')}">date</div>
+									</div>
+								</li>
+							</ul>
+							<hr/>
+							
+							<h4 >最in收藏</h4>
+							<ul class="popular-blog-post">
+								<li class="clearfix"  th:each="article,articleState : ${hotCollect}" >
+									<div class="img-wrapper clearfix">
+										<img th:src="@{'/image/title/'+${article.id}}" alt=""/>
+									</div>
+									<div class="popular-blog-detail">
+										<a th:href="@{'/article/single/'+${article.id}}" class="h5" th:text="${article.title}">title</a>
+										<div class="text-muted m-top-sm"  th:text="${#calendars.format(article.publishDate,'yyyy年MM月dd日')}">date</div>
+									</div>
+								</li>
+							</ul>
+
+							<hr/>
+							
+							<h4>热门话题</h4>
+							<ul class="popular-blog-post">
+								<li class="clearfix"  th:each="topic,topicState : ${hotTopics}" >
+									<div class="img-wrapper clearfix">
+										<img th:src="@{'/image/topic/'+${topic.id}}" alt=""/>
+									</div>
+									<div class="popular-blog-detail">
+									<a th:href="@{'/topic/'+ ${topic.id}}" th:text="${topic.name}"></a>
+									<div class="text-muted m-top-sm"  th:text="${topic.description}"></div>
+									</div>
+								</li>
+							</ul>
+
+							<hr/>
+							<div class="panel panel-default weather-widget">
+								<div class="panel-body bg-success text-white">
+									<div class="h4 text-white text-center">今天天气</div>
+
+									<div class="m-top-md m-bottom-md text-center">
+										<canvas id="skycon1" width="120" height="120"></canvas>
+									</div>
+
+									<div class="degree-text text-center" id="todayTemp"></div>
+								</div>
+								<div class="panel-footer bg-white text-center padding-md">
+									<div class="h4 text-upper">大连 <i class="fa fa-map-marker"></i></div>
+									<div class="text-muted font-12 m-top-xs" id="todayWeather"></div>
+								</div>
+							</div>
+							<hr/>
+							
+							<div class="panel panel-default calendar-widget">
+								<div class="padding-md bg-info clearfix">
+									<div class="date-big" id="calDate"></div>
+									<div class="current-date">
+										<div class="text-upper" id="calWeek">星期 </div>
+										<small class="text-muted block" id="calFull"></small>
+									</div>
+								</div>
+								<div class="panel-body no-padding bg-white">
+									<p id="calendar" class="custom-calendar" style="width:100%"></p>
+								</div>
+							</div><!-- ./panel -->
+							<hr/>
+						</div><!-- ./col -->
+					</div>
+				</div><!-- ./padding-md -->
+			</div><!-- /main-container -->
+			<hr />
+			<div th:include="include/footer :: #bottom_footer"></div>
+		</div><!-- /wrapper -->
+
+		<a href="#" class="scroll-to-top hidden-print"><i class="fa fa-chevron-up fa-lg"></i></a>
+		<script type="text/javascript">
+		
+			$(function(){
+				$("p[name='content']").each(function(){
+					
+					$(this).html($.base64.atob($(this).html(), true))
+					
+				});
+				
+				
+				
+				$("#homepage").addClass("active");
+				
+				
+				$.ajax({
+					url:'/weather',
+					type:'GET',
+					success:function(data){
+						var weather = data.weatherinfo;
+						var play = "clear-day" ;
+						if(weather){
+							//$("#todayTemp").text(weather.temp1+ " - " + weather.temp2);
+							$("#todayWeather").text(weather.weather);
+							if(weather.weather.indexOf("晴") != -1){
+								play = "clear-day" ;
+							}else if(weather.weather.indexOf("云") != -1){
+								play = "partly-cloudy-day" ;
+							}else if(weather.weather.indexOf("风") != -1){
+								play = "wind" ;
+							}else{
+								play = "sleet" ;
+							}
+   						}
+						var icons = new Skycons({"color": "white"});
+					    icons.set("skycon1", play);
+					    icons.play();
+					}
+					});
+				
+				//Datepicker
+				var date=new Date();
+				$("#calDate").text(date.getDate());
+				$("#calWeek").append(date.getDay());
+				$("#calFull").text(date.getFullYear() + "年 - " + (date.getMonth()+1)+"月");
+				$('#calendar').DatePicker({
+					flat: true,
+					date: date.toLocaleDateString(),
+					current: date.toLocaleDateString(),
+					calendars: 1,
+					starts: 1
+				});
+			});
+			
+		
+		</script>
+  	</body>
+  	
+  	
+  	
+  	
+</html>

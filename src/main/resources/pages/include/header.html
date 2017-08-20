@@ -1,0 +1,85 @@
+<meta charset="utf-8"></meta>
+<header class="top-nav sidebar-mini" id="top_header">
+	<div class="top-nav-inner">
+		<div class="nav-header">
+			<a th:href="@{/}" class="brand">
+				<span class="brand-name">山 楂</span>
+			</a>
+		</div>
+		<div class="nav-container">
+			<ul class="nav-notification">	
+				<li class="search-list">
+					<div class="search-input-wrapper">
+						<div class="search-input">
+						<script type="text/javascript">
+						function search(){
+							var title=document.getElementById("title").value;
+							//alert(title);
+							var aaa = "/article/search/"+title;
+							document.getElementById("hh").href=aaa;
+							}
+						</script>
+							<input name="title" id="title" onchange="search()" type="text" class="form-control input-sm inline-block" placeholder="搜索感兴趣的内容..."/>
+							<a id="hh" href="" onclick="search()" class="input-icon text-normal"><i class="ion-ios7-search-strong"></i></a>
+						</div>
+					</div>
+				</li>
+				<li>
+		          	<a th:href="@{/index}"  id="homepage">首页</a>
+		        </li>
+		        <li>
+		          	<a th:if="${session.user} != null" id="topicFollow" th:href="@{/topic/follow}">话题</a>
+		          		<a th:if="${session.user} == null" id="topicFollow" th:href="@{/signin}" >话题</a>
+		        </li>
+		        <li >
+		          	<a th:if="${session.user} != null" id="recommendations" th:href="@{/explore/recommendations}">发现</a>
+		        	<a th:if="${session.user} == null" id="topicFollow" th:href="@{/signin}" >发现</a>
+		        </li>
+		        <li>
+		          	<a th:if="${session.user} != null" id="newArticle" th:href="@{/article/new}">提问</a>
+		        	<a th:if="${session.user} == null" id="topicFollow" th:href="@{/signin}" >提问</a>
+		        </li>
+     	 	</ul>
+			<div class="pull-right m-right-sm">
+				<div class=" nav-notification user-block hidden-xs" th:if="${session.user} != null">
+					<a href="#" id="userToggle" data-toggle="dropdown">
+						<img th:src="@{'/image/head/'+${session.user.id}}" alt="" class="img-circle inline-block user-profile-pic"/>
+						<div class="user-detail inline-block" sec:authentication="principal.nickName">
+							<i class="fa fa-angle-down"></i>
+						</div>
+					</a>
+					<div class="panel border dropdown-menu user-panel">
+						<div class="notification panel-body paddingTB-sm">
+							<ul>
+								<li>
+									<a th:href="@{/user/profile}">
+										<i class="fa fa-edit fa-lg"></i><span class="m-left-xs">我</span>
+									</a>
+								</li>
+								<li>
+									<a th:href="@{/message/inbox}">
+										<i class="fa fa-inbox fa-lg"></i><span class="m-left-xs">私信</span>
+										<span class="badge badge-danger bounceIn animation-delay3" th:text="${unread}">2</span>
+									</a>
+								</li>
+								<li>
+									<a th:href="@{/signin}">
+										<i class="fa fa-power-off fa-lg"></i><span class="m-left-xs">退出登录</span>
+									</a>
+								</li>
+								
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div th:if="${session.user} == null">
+				<ul class="nav navbar-nav navbar-right hidden-sm">
+					<li><a th:href="@{/signin}" >登录</a></li>
+					<li><a th:href="@{/signup}" >注册</a></li>
+				</ul>
+				</div>
+			</div>
+		</div>
+	</div><!-- ./top-nav-inner -->	
+	
+</header>

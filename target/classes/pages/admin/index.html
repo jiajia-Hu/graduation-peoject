@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" 
+ 				 xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4 " >
+  	<head>
+	    <meta charset="utf-8"></meta>
+	    <!-- Bootstrap core CSS -->
+	   	<link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet"></link>
+		<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet"></link>
+		<link th:href="@{/css/ionicons.min.css}" rel="stylesheet"></link>
+		<link th:href="@{/css/simplify.css}" rel="stylesheet"></link>
+		
+		<!-- Jquery -->
+		<script th:src="@{/js/jquery-1.11.1.min.js}"></script>
+		<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+		<script th:src='@{/js/jquery.slimscroll.min.js}'></script>
+		<script th:src='@{/js/modernizr.min.js}'></script>
+		<script th:src="@{/js/simplify/simplify.js}"></script>
+	
+  	</head>
+
+  	<body class="overflow-hidden">
+		<div class="wrapper preload">
+			<header class="top-nav">
+				<div class="top-nav-inner">
+					<div class="nav-header">
+						<a th:href="@{/admin/index}" class="brand">
+							<span class="brand-name">山    楂 管 理 后 台</span>
+						</a>
+					</div>
+				</div>
+				
+			</header>
+			<aside class="sidebar-menu fixed">
+				<div class="sidebar-inner scrollable-sidebar">
+					<div class="main-menu">
+						<ul class="accordion">
+							<li class="openable bg-palette3">
+								<a href="#">
+									<span class="menu-content block">
+										<span class="menu-icon"><i class="block fa fa-desktop fa-lg"></i></span>
+										<span class="text m-left-sm">用户管理</span>
+										<span class="submenu-icon"></span>
+									</span>
+								</a>
+								<ul class="submenu bg-palette4">
+									<li><a th:href="@{/admin/user}"><span class="submenu-label">用户</span></a></li>
+									<li><a  th:href="@{/admin/admin}"><span class="submenu-label">管理员</span></a></li>
+								</ul>
+							</li>
+							<li class="openable bg-palette3">
+								<a href="#">
+									<span class="menu-content block">
+										<span class="menu-icon"><i class="block fa fa-list fa-lg"></i></span>
+										<span class="text m-left-sm">文章管理</span>
+										<span class="submenu-icon"></span>
+									</span>
+								</a>
+								<ul class="submenu bg-palette4">
+									<li><a th:href="@{/admin/article}"><span class="submenu-label">文章管理</span></a></li>
+									<li><a th:href="@{/admin/report}"><span class="submenu-label">处理举报</span></a></li>
+								</ul>
+							</li>
+							<li class="openable bg-palette3">
+								<a href="#">
+									<span class="menu-content block">
+										<span class="menu-icon"><i class="block fa fa-envelope fa-lg"></i></span>
+										<span class="text m-left-sm">公告管理</span>
+										<span class="submenu-icon"></span>
+									</span>
+								</a>
+								<ul class="submenu bg-palette4">
+									<li><a th:href="@{/admin/notice}"><span class="submenu-label">发布公告</span></a></li>
+								</ul>
+							</li>
+						</ul>
+					</div>	
+				</div><!-- sidebar-inner -->
+			</aside>
+			<div class="main-container" style="left:240px">
+				<div class="padding-md">
+				<h3 class="header-text m-top-lg">欢迎使用山楂问答管理系统</h3>
+				</div><!-- ./padding-md -->
+			</div><!-- /main-container -->
+		</div><!-- /wrapper -->
+  	</body>
+</html>

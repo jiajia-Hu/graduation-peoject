@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" 
+ 				 xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4 " >
+ 	<head  th:substituteby ="include/link"></head>
+
+  	<body class="overflow-hidden">
+  	<input type="hidden" id="articleId" th:value="${article.id}"/>
+		<div class="wrapper preload">
+		<div th:substituteby ="include/header :: #top_header"></div>
+			<div class="main-container">
+			<div class="padding-md" style="margin-left: 10%;width: 80%">
+				<div class="padding-md">
+					<div class="row">
+						<div class="col-md-8">
+							<div class="blog-wrapper">
+								<div class="blog-list">
+									<div class="blog-header clearfix m-bottom-md">
+										<div class="blog-date" >
+											<span th:text="${#calendars.format(article.publishDate,'dd')}"></span><br/>
+											<div class="blog-month" th:text="${#calendars.format(article.publishDate,'MMM')}"></div>
+										</div>
+
+										<div class="blog-title">
+											<div class="text-upper" th:text="${article.title}"></div>
+											<div class="text-muted font-12">
+												<span >❤有 </span ><span th:text="${article.likeNum}"> </span><span >人觉着这个问题很赞</span> 
+												<a href="javascript:void(0)" th:onclick="'javascript:articleLike(\''+${article.id}+'\');'" >点赞❤</a>
+												<a href="javascript:void(0)" th:onclick="'javascript:articleCollect(\''+${article.id}+'\');'" >收藏</a>
+												<a href="javascript:void(0)"  data-toggle="modal" data-target="#myModal">邀请</a>
+												<a href="javascript:void(0)" data-toggle="modal" data-target="#myModal1" >举报</a>
+											</div>
+
+											<div class="text-muted font-12">
+												作者: <a th:href="@{'/user/profile/'+${article.author}}" th:text="${article.authorName}"></a>
+												来自话题: <a th:href="@{'/topic/'+ ${article.topic}}" th:text="${article.topicName}"></a>
+												<span class="m-left-xs m-right-xs">|</span>
+												<span><i class="fa fa-comments"></i> <span th:text="${article.comments}"> </span> 条回答</span>
+											</div>
+										</div>
+									</div><!-- ./blog-header -->
+									<div class="article_title"  >
+										<img  th:src="@{'/image/title/'+${article.id}}" style="height: 350px;width: 90%"/>
+									</div>
+									<br />
+									<hr />
+									<br></br>
+									<div class="article_content"  style="width: 90%" th:text="${article.content}">
+									
+									</div>
+									<hr/>
+									<ul class="media-list m-top-lg">
+										<li class="media" th:each="comment,commentState : ${comments}">
+											<a class="pull-left" href="#">
+												<img class="media-object" th:src="@{'/image/head/'+${comment.userId}}" alt="User Avatar" style="width: 40px; height: 40px;"></img>
+											</a>
+											<div class="media-body">
+												<div class="media-heading">
+													<a th:href="@{'/user/profile/'+${article.author}}" class="font-16" th:text="${comment.userName}"></a> <span th:if="${comment.replyUser} != 0"> 回复  <span th:text="${comment.replyUserName}"></span>  </span>
+													<small class="text-muted block">
+														<span th:text="${#calendars.format(comment.commentDate,'yyyy年MM月dd日')}"></span> 
+														<a href="javascript:void(0)" th:onclick="'javascript:replyUser(\''+${comment.userId}+'\',\''+${comment.userName}+'\');'">回复</a>
+														<a href="javascript:void(0)" th:onclick="'javascript:commentLike(\''+${comment.id}+'\');'">赞一个</a>
+														<a href="javascript:void(0)" th:onclick="'javascript:commentReport(\''+${comment.id}+'\');'">举报</a>
+														<a th:if="${session.user.id} == ${article.author}" href="javascript:void(0)" th:onclick="'javascript:deleteComment(\''+${comment.id}+'\');'" >删除</a>
+														<a th:if="${session.user.id} == ${comment.userId}" href="javascript:void(0)" th:onclick="'javascript:deleteComment(\''+${comment.id}+'\');'" >删除</a>
+													</small>
+													<div class="text-muted block">
+													<span >有 </span><span th:text="${comment.like}"> </span><span >人觉着这个回答很赞</span> 
+													</div>
+												</div>
+												<span th:text="${comment.comment}">
+												
+												</span>
+											</div>
+										</li>
+									</ul>
+								</div><!-- ./blog-list -->
+								
+								<textarea rows="4" class="form-control" id="comment"></textarea>
+								<button id="replyBtn" class="btn btn-success" style="float: right;">发表回答</button>
+							</div><!-- ./blog-wrapper -->
+						</div><!-- ./col -->
+						<div class="col-md-4">
+							<hr/>
+
+							<h4>相关推荐</h4>
+							<ul class="popular-blog-post">
+								<li class="clearfix"  th:each="article,articleState : ${articleRelated}" >
+									<div class="img-wrapper clearfix">
+										<img th:src="@{'/image/title/'+${article.id}}" alt=""/>
+									</div>
+									<div class="popular-blog-detail">
+										<a th:href="@{'/article/single/'+${article.id}}" class="h5" th:text="${article.title}">title</a>
+										<div class="text-muted m-top-sm"  th:text="'来自话题-'+${article.topicName}">topic</div>
+									</div>
+								</li>
+							</ul>
+							<hr/>
+						</div><!-- ./col -->
+					</div>
+				</div><!-- ./padding-md -->
+			</div><!-- /main-container -->
+		</div><!-- /wrapper -->
+		
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							&times;
+						</button>
+						<h4 class="modal-title" id="myModalLabel">
+							选择要邀请的用户
+						</h4>
+					</div>
+					<div class="modal-body" style="height: 200px">
+						邀请用户来回答你的问题
+						<select class="selectpicker" data-live-search="true" title="请选择邀请的用户" >
+						  <option th:each="user,userState : ${users}"  th:text="${user.nickName}" th:value="${user.id}"></option>
+						</select>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+						</button>
+						<button type="button" class="btn btn-primary"  data-dismiss="modal">
+							提交
+						</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal -->
+		</div>
+		
+		
+		
+		
+		
+		<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							&times;
+						</button>
+						<h4 class="modal-title" id="myModalLabel">
+							请填写举报原因
+						</h4>
+					</div>
+					<div class="modal-body" style="height: 200px">
+						举报原因
+						<textarea id="reportRId" rows="3" class="form-control"></textarea>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+						</button>
+						<button type="button" class="btn btn-primary"  data-dismiss="modal">
+							提交
+						</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal -->
+		</div>
+		
+		</div>
+
+		<a href="#" class="scroll-to-top hidden-print"><i class="fa fa-chevron-up fa-lg"></i></a>
+		<script type="text/javascript">
+		
+		var replyId = 0; 
+		
+		function replyUser(id,name){
+			$("#comment").attr("placeholder","回复" + name);
+			replyId = id;
+		}
+		
+		
+		function commentReport(id){
+			$.get("/article/comment_report",{
+				commentId:id
+			},function(data){
+				alert("举报成功,请等待管理员处理!");
+				location.reload();
+			});
+		}
+		
+		
+		function deleteComment(id){
+			$.get("/article/comment_delete",{
+				id:id
+			},function(data){
+				alert("删除成功");
+				location.reload();
+			});
+		}
+		
+		
+		
+		function commentLike(id){
+			$.get("/article/comment_like",{
+				commentId:id
+			},function(data){
+				alert("赞成功啦!");
+				location.reload();
+			});
+		}
+		
+		function articleLike(id){
+			$.get("/article/like",{
+				articleId:id
+			},function(data){
+				//alert("赞成功啦!");
+				location.reload();
+			});
+		}
+		
+		function articleCollect(id){
+			$.get("/article/collect",{
+				articleId:id
+			},function(data){
+				alert("收藏成功!");
+				location.reload();
+			});
+		}
+		
+		
+		$(function(){
+			
+			$('#myModal1').on('hide.bs.modal', function () {
+				var value = $("#reportRId").val();
+				alert(value);
+				if(value == " "){
+					alert("请填写举报原因");
+				}
+				$.get("/article/report",{
+					articleId:$("#articleId").val(),
+					reportReason:value
+				},function(data){
+					alert("举报成功,请等待管理员处理!");
+					location.reload();
+				});
+		    });
+			
+			
+			
+			
+			
+			
+			$('#myModal').on('hide.bs.modal', function () {
+				var value = $(".selectpicker").selectpicker('val');
+				
+				if(value==""){
+					return;
+				}
+							
+				$.get("/article/invite",{
+					invitedId:value,
+					articleId:$("#articleId").val()
+				},function(data){
+					alert("邀请成功!");
+					location.reload();
+				});
+		    });
+			
+			$("#replyBtn").click(function(){
+				var value = $("#comment").val();
+				if(value == ""){
+					alert("请输入回答内容");
+					return;
+				}
+				
+				
+				$.get("/article/comment",{
+					comment:value,
+					articleId:$("#articleId").val(),
+					replyUser:replyId
+				},function(data){
+					//alert("评论成功!");
+					location.reload();
+				});
+			});
+			
+			$(".article_content").html($.base64.atob($(".article_content").html(), true));
+		});
+		</script>
+  	</body>
+</html>

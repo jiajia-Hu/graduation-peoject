@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" 
+ 				 xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4 " >
+ 	<head  th:substituteby ="include/link"></head>
+  	<body class="overflow-hidden">
+		<div class="wrapper preload">
+			<div th:substituteby ="include/header :: #top_header"></div>
+			<div class="main-container sidebar-mini">
+				<div class="padding-md" style="margin-left: 15%;width: 70%">
+					<h3 class="header-text m-top-lg" th:text="${topic.name}+ ' 话题下的热门问题'">
+					</h3>
+					<button th:if="${follow == false}" style="position: relative;top: -80px;float: right;" class="btn btn-default marginTB-xs" th:onclick="'JavaScript:followTopic(\''+${topic.id}+'\')'">
+						<span>+关注</span>
+					</button>
+					<button th:if="${follow == true}" style="position: relative;top: -80px;float: right;" class="btn btn-default marginTB-xs" th:onclick="'JavaScript:cancelFollowTopic(\''+${topic.id}+'\')'">
+						<span>取消关注</span>
+					</button>
+					<div class="row" >
+						<div class="col-md-8">
+							<div class="blog-wrapper">
+								<div class="blog-list" th:each="article,articleState : ${articles}">
+									<div class="blog-header clearfix m-bottom-md">
+										<div class="blog-date" >
+											<span th:text="${#calendars.format(article.publishDate,'dd')}"></span><br/>
+											<div class="blog-month" th:text="${#calendars.format(article.publishDate,'MMM')}"></div>
+										</div>
+
+										<div class="blog-title">
+											<a class="text-upper" th:href="@{'/article/single/'+${article.id}}"  th:text="${article.title}">title</a>
+
+											<div class="text-muted font-12">
+												作者: <a th:href="@{'/user/profile/'+${article.author}}" th:text="${article.authorName}">John Doe</a>
+												来自话题: <a th:href="@{'/topic/'+ ${article.topic}}" th:text="${article.topicName}">Technology</a>
+												<span class="m-left-xs m-right-xs">|</span>
+												<span><i class="fa fa-comments"></i> <span th:text="${article.comments}"> </span> 条评论</span>
+											</div>
+											<div class="text-muted font-12">
+												<span th:text="${article.likeNum}"></span><span> 人❤这个问题</span>
+											</div>
+										</div>
+									</div><!-- ./blog-header -->
+									<div class="article_title"  >
+										<img  th:src="@{'/image/title/'+${article.id}}" style="height: 300px;width: 90%"/>
+									</div>
+
+									<div class="m-top-md">
+										<a th:href="@{'/article/single/'+${article.id}}" class="btn btn-info text-upper">查看详情</a>
+									</div>
+								</div><!-- ./blog-list -->
+							</div>
+						</div><!-- ./col -->
+						<div class="col-md-4">
+							<hr/>
+							<h4>描述</h4>
+							<div th:text="${topic.description}"></div>
+							<div class="img-wrapper clearfix">
+								<img th:src="@{'/image/topic/'+${topic.id}}" alt=""/>
+							</div>
+							<hr/>
+							<h4>最in收藏</h4>
+							<ul class="popular-blog-post">
+								<li class="clearfix"  th:each="article,articleState : ${article24Hot}" >
+									<div class="img-wrapper clearfix">
+										<img th:src="@{'/image/title/'+${article.id}}" alt=""/>
+									</div>
+									<div class="popular-blog-detail">
+										<a th:href="@{'/article/single/'+${article.id}}" class="h5" th:text="${article.title}">title</a>
+										<div class="text-muted m-top-sm"  th:text="${#calendars.format(article.publishDate,'yyyy年MM月dd日')}">date</div>
+									</div>
+								</li>
+							</ul>
+
+							<hr/>
+							
+							<h4>热门话题</h4>
+							<ul class="popular-blog-post">
+								<li class="clearfix"  th:each="topic,topicState : ${hotTopics}" >
+									<div class="img-wrapper clearfix">
+										<img th:src="@{'/image/topic/'+${topic.id}}" alt=""/>
+									</div>
+									<div class="popular-blog-detail">
+									<a th:href="@{'/topic/'+ ${topic.id}}" th:text="${topic.name}"></a>
+									<div class="text-muted m-top-sm"  th:text="${topic.description}"></div>
+									</div>
+								</li>
+							</ul>
+							<hr/>
+						</div><!-- ./col -->
+					</div>
+				</div><!-- ./padding-md -->
+			</div><!-- /main-container -->
+		</div><!-- /wrapper -->
+
+		<a href="#" class="scroll-to-top hidden-print"><i class="fa fa-chevron-up fa-lg"></i></a>
+		<script type="text/javascript">
+		
+		function followTopic(id){
+			$.get("/topic/addFollow",{
+				topicId:id
+			},function(data){
+				alert("关注成功!");
+				location.reload();
+			});
+			
+		}
+		
+		
+		function cancelFollowTopic(id){
+			$.get("/topic/cancelFollow",{
+				topicId:id
+			},function(data){
+				alert("取消关注成功!");
+				location.reload();
+			});
+			
+		}
+		
+			$(function(){
+				
+				$("#topicFollow").addClass("active");
+				
+				$("p[name='content']").each(function(){
+					
+					$(this).html($.base64.atob($(this).html(), true))
+					
+				});
+				
+			});
+		</script>
+  	</body>
+  	
+  	
+  	
+  	
+</html>

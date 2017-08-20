@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" 
+ 				 xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4 " >
+ 	<head  th:substituteby ="include/link"></head>
+  	<body class="overflow-hidden">
+		<div class="wrapper preload">
+			<div th:substituteby ="include/header :: #top_header"></div>
+			<div class="main-container sidebar-mini">
+				<div class="padding-md" style="margin-left: 15%;width: 70%">
+					<h3 class="header-text m-top-lg" >
+						搜索内容如下：
+					</h3>
+					<div class="row" >
+						<div class="col-md-8">
+							<div class="blog-wrapper">
+								<div class="blog-list" th:each="article,articleState : ${articles}">
+									<div class="blog-header clearfix m-bottom-md">
+										<div class="blog-date" >
+											<span th:text="${#calendars.format(article.publishDate,'dd')}"></span><br/>
+											<div class="blog-month" th:text="${#calendars.format(article.publishDate,'MMM')}"></div>
+										</div>
+
+										<div class="blog-title">
+											<a class="text-upper" th:href="@{'/article/single/'+${article.id}}"  th:text="${article.title}">title</a>
+
+											<div class="text-muted font-12">
+												作者: <a th:href="@{'/user/profile/'+${article.author}}" th:text="${article.authorName}">John Doe</a>
+												来自话题: <a th:href="@{'/topic/'+ ${article.topic}}" th:text="${article.topicName}">Technology</a>
+												<span class="m-left-xs m-right-xs">|</span>
+												<span><i class="fa fa-comments"></i> <span th:text="${article.comments}"> </span> 条评论</span>
+											</div>
+											<div class="text-muted font-12">
+												<span th:text="${article.likeNum}"></span><span> 人❤这个问题</span>
+											</div>
+										</div>
+									</div><!-- ./blog-header -->
+									<div class="article_title"  >
+										<img  th:src="@{'/image/title/'+${article.id}}" style="height: 300px;width: 90%"/>
+									</div>
+									<p class="m-top-lg" th:text="${article.content}" name="content">
+										content
+									</p>
+
+									<div class="m-top-md">
+										<a th:href="@{'/article/single/'+${article.id}}" class="btn btn-danger text-upper">查看全文</a>
+									</div>
+								</div><!-- ./blog-list -->
+							</div>
+						</div><!-- ./col -->
+						<div class="col-md-4">
+							<ul class="linopoint">
+								<li><a th:href="@{/user/collect}" class="zm-side-nav-link"><i class="zg-icon zg-icon-sidenav-fav"></i>我的收藏</a></li>
+								<li><a th:href="@{/topic/follow}" class="zm-side-nav-link"><i class="zg-icon zg-icon-sidenav-follow"></i>我关注的话题</a></li>
+								<li><a th:href="@{/article/inviteme}" class="zm-side-nav-link"><i class="zg-icon zg-icon-sidenav-invite"></i>邀请我回答的问题</a></li>
+							</ul>
+							<hr/>
+
+							<h4>热门☼文章</h4>
+							<ul class="popular-blog-post">
+								<li class="clearfix"  th:each="article,articleState : ${article24Hot}" >
+									<div class="img-wrapper clearfix">
+										<img th:src="@{'/image/title/'+${article.id}}" alt=""/>
+									</div>
+									<div class="popular-blog-detail">
+										<a th:href="@{'/article/single/'+${article.id}}" class="h5" th:text="${article.title}">title</a>
+										<div class="text-muted m-top-sm"  th:text="${#calendars.format(article.publishDate,'yyyy年MM月dd日')}">date</div>
+									</div>
+								</li>
+							</ul>
+							<hr/>
+							<h4>最in收藏</h4>
+							<ul class="popular-blog-post">
+								<li class="clearfix"  th:each="article,articleState : ${article24Hot}" >
+									<div class="img-wrapper clearfix">
+										<img th:src="@{'/image/title/'+${article.id}}" alt=""/>
+									</div>
+									<div class="popular-blog-detail">
+										<a th:href="@{'/article/single/'+${article.id}}" class="h5" th:text="${article.title}">title</a>
+										<div class="text-muted m-top-sm"  th:text="${#calendars.format(article.publishDate,'yyyy年MM月dd日')}">date</div>
+									</div>
+								</li>
+							</ul>
+
+							<hr/>
+							
+
+							<h4>热门话题</h4>
+
+							<ul class="blog-sidebar-list">
+								<li  th:each="topic,topicState : ${hotTopics}" >
+									<a th:href="@{'/topic/'+ ${topic.id}}" th:text="${topic.name}"></a>
+								</li>
+							</ul>
+
+							<hr/>
+						</div><!-- ./col -->
+					</div>
+				</div><!-- ./padding-md -->
+			</div><!-- /main-container -->
+		</div><!-- /wrapper -->
+
+		<a href="#" class="scroll-to-top hidden-print"><i class="fa fa-chevron-up fa-lg"></i></a>
+		<script type="text/javascript">
+		
+			$(function(){
+				
+				$("#recommendations").addClass("active");
+				
+				$("p[name='content']").each(function(){
+					
+					$(this).html($.base64.atob($(this).html(), true))
+					
+				});
+				
+			});
+		</script>
+  	</body>
+  	
+  	
+  	
+  	
+</html>

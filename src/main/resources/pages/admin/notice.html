@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" 
+ 				>
+  	<head>
+	    <meta charset="utf-8"></meta>
+	    <!-- Bootstrap core CSS -->
+	   	<link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet"></link>
+		<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet"></link>
+		<link th:href="@{/css/ionicons.min.css}" rel="stylesheet"></link>
+		<link th:href="@{/css/simplify.css}" rel="stylesheet"></link>
+	   	<link th:href="@{/bootstrap/css/bootstrap-table.css}" rel="stylesheet"></link>
+		
+		<!-- Jquery -->
+		<script th:src="@{/js/jquery-1.11.1.min.js}"></script>
+		<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+		<script th:src="@{/bootstrap/js/bootstrap-table.js}"></script>
+		<script th:src="@{/bootstrap/js/bootstrap-table-zh-CN.js}"></script>
+		<script th:src='@{/js/jquery.slimscroll.min.js}'></script>
+		<script th:src='@{/js/modernizr.min.js}'></script>
+		<script th:src="@{/js/simplify/simplify.js}"></script>
+	
+  	</head>
+
+  	<body class="overflow-hidden">
+		<div class="wrapper preload">
+			<header class="top-nav">
+				<div class="top-nav-inner">
+					<div class="nav-header">
+						<a th:href="@{/admin/index}" class="brand">
+							<span class="brand-name">山    楂</span>
+						</a>
+					</div>
+				</div>
+			</header>
+			<aside class="sidebar-menu fixed">
+				<div class="sidebar-inner scrollable-sidebar">
+					<div class="main-menu">
+						<ul class="accordion">
+							<li class="openable bg-palette3">
+								<a href="#">
+									<span class="menu-content block">
+										<span class="menu-icon"><i class="block fa fa-desktop fa-lg"></i></span>
+										<span class="text m-left-sm">用户管理</span>
+										<span class="submenu-icon"></span>
+									</span>
+								</a>
+								<ul class="submenu bg-palette4">
+									<li><a th:href="@{/admin/user}"><span class="submenu-label">用户</span></a></li>
+									<li><a  th:href="@{/admin/admin}"><span class="submenu-label">管理员</span></a></li>
+								</ul>
+							</li>
+							<li class="openable bg-palette3">
+								<a href="#">
+									<span class="menu-content block">
+										<span class="menu-icon"><i class="block fa fa-list fa-lg"></i></span>
+										<span class="text m-left-sm">文章管理</span>
+										<span class="submenu-icon"></span>
+									</span>
+								</a>
+								<ul class="submenu bg-palette4">
+									<li><a th:href="@{/admin/article}"><span class="submenu-label">文章管理</span></a></li>
+									<li><a th:href="@{/admin/report}"><span class="submenu-label">处理举报</span></a></li>
+								</ul>
+							</li>
+							<li class="openable bg-palette3">
+								<a href="#">
+									<span class="menu-content block">
+										<span class="menu-icon"><i class="block fa fa-envelope fa-lg"></i></span>
+										<span class="text m-left-sm">公告管理</span>
+										<span class="submenu-icon"></span>
+									</span>
+								</a>
+								<ul class="submenu bg-palette4">
+									<li><a th:href="@{/admin/notice}"><span class="submenu-label">发布公告</span></a></li>
+								</ul>
+							</li>
+						</ul>
+					</div>	
+				</div><!-- sidebar-inner -->
+			</aside>
+			<div class="main-container" style="margin-left:240px">
+				<div class="padding-md">
+					<h3 class="header-text m-top-lg">公告管理</h3>
+					<button class="btn btn-success" data-toggle="modal" data-target="#myModal">发布公告</button>
+					<table id="dataTable" data-toggle="table" class="table table-striped"
+			               data-height="460"
+			               data-pagination="true">
+						<thead>
+							<tr>
+								<th  data-field="title">标题</th>
+								<th  data-field="content">内容</th>
+								<th  data-field="publishDate">发布日期</th>
+								<th  data-field="operate">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				
+				</div><!-- ./padding-md -->
+			</div><!-- /main-container -->
+		</div><!-- /wrapper -->
+		
+		
+		
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							&times;
+						</button>
+						<h4 class="modal-title" id="myModalLabel">
+							发布公告
+						</h4>
+					</div>
+					<div class="modal-body" >
+					<form class="form-horizontal" role="form" th:action="@{/admin/publisNotcie}">
+					  <div class="form-group">
+					    <label for="title" class="col-sm-2 control-label">标题</label>
+					    <div class="col-sm-10">
+					      <input type="text" class="form-control" id="title" name ="title" placeholder="请输入公告标题"></input>
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <label for="content" class="col-sm-2 control-label">公告内容</label>
+					    <div class="col-sm-10">
+					      <textarea rows="8" class="form-control"  id="content" name="content" placeholder="请输入公告内容"></textarea>
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <div class="col-sm-offset-5 col-sm-10">
+					      <button type="submit" class="btn btn-primary">提交</button>
+					    </div>
+					  </div>
+					</form>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal -->
+		</div>
+		
+  	</body>
+  	<script type="text/javascript">
+  	
+  	 var $table = $('#dataTable');
+  	 setTimeout(function(){
+  		 $.get("/admin/notices",{},function(data){
+  			 
+  			for (x in data)
+  			{
+  				var obj = data[x];
+  				var da =  new Date(obj.publishDate);
+  			    var year = da.getFullYear()+'年';
+  			    var month = da.getMonth()+1+'月';
+  			    var date = da.getDate()+'日';
+  				
+  				obj.publishDate = [year,month,date].join('-')
+  				obj.operate = '<button class="btn btn-danger btn-xs" onclick="deleteNotice('+obj.id+')">删除</button>';
+  				  				
+  			}
+  			$table.bootstrapTable('load',data);
+  		 });
+  		 
+  	 },0);
+  	 
+  	 
+  	 function deleteNotice(id){
+  		 $.get("/admin/deleteNotice",{id:id},function(data){
+  			alert("删除成功!");  				 
+  			location.reload();
+   		 });
+  		 
+  	 }
+  	 
+  	 
+  	</script>
+</html>

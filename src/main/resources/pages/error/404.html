@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  >
+  	<head>
+	    <meta charset="utf-8"></meta>
+	    <title>山楂问答 - 注册</title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+	    <meta name="description" content=""></meta>
+	    <meta name="author" content=""></meta>
+
+	    <!-- Bootstrap core CSS -->
+	    <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet"></link>
+		
+		<!-- Simplify -->
+		<link th:href="@{/css/simplify.min.css}" rel="stylesheet"></link>
+	
+		<link th:href="@{/css/global.css}" rel="stylesheet"></link>
+	
+  	</head>
+
+  	<body class="overflow-hidden light-background">
+		<div class="wrapper no-navigation preload">
+			<div class="error-wrapper">
+				<div class="error-inner">
+					<div class="error-type">ERROR</div>
+					<h1>Page Not Found</h1>
+					<p>Look like the page you're looking for isn't here anymore.
+						Try typing the address again or start over from the home page.</p>
+					<div class="m-top-md">
+						<a th:href="@{/}" class="btn btn-default btn-lg text-upper">Back to Home</a>
+					</div>
+				</div><!-- ./error-inner -->
+			</div><!-- ./error-wrapper -->
+		</div><!-- /wrapper -->
+
+		<a href="" id="scroll-to-top" class="hidden-print"><i class="icon-chevron-up"></i></a>
+
+	    <!-- Le javascript
+	    ================================================== -->
+	    <!-- Placed at the end of the document so the pages load faster -->
+		
+		<!-- Jquery -->
+		<script th:src="@{/js/jquery-1.11.1.min.js}"></script>
+		
+		<!-- Bootstrap -->
+	    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+		
+		<!-- Slimscroll -->
+		<script th:src='@{/js/jquery.slimscroll.min.js}'></script>
+		
+		<!-- Popup Overlay -->
+		<script th:src='@{/js/jquery.popupoverlay.min.js}'></script>
+
+		<!-- Modernizr -->
+		<script th:src='@{/js/modernizr.min.js}'></script>
+		
+		<!-- Simplify -->
+		<script th:src="@{/js/simplify/simplify.js}"></script>
+
+		<script>
+			$(function()	{
+				setTimeout(function() {
+					$('.error-type').addClass('animated');
+				},100);
+			});
+		</script>
+		
+  	</body>
+</html>

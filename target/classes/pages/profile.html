@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" 
+ 				 xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4 " >
+ 	<head  th:substituteby ="include/link"></head>
+
+  	<body class="overflow-hidden">
+		<div class="wrapper preload">
+			<div th:substituteby ="include/header :: #top_header"></div>
+			<div class="main-container" style="width:80%;margin-left: 10%">
+				<div class="padding-md">
+					<h3 class="header-text m-bottom-md" th:text="${userProfile.introduction}">
+					</h3>
+					<script type="text/javascript">
+					function followUser(id){
+						$.get("/user/addFollow",{
+							followId:id
+						},function(data){
+							alert("关注成功!");
+							location.reload();
+						});
+						
+					}
+					</script>
+					<div th:if="${session.user.id} != ${userProfile.id}" >
+					<button style="position: relative;top: -80px;float: right;" class="btn btn-default marginTB-xs" th:onclick="'JavaScript:followUser(\''+${userProfile.id}+'\')'">
+						<span>+关注</span>
+					</button>
+					</div>
+					<div class=" user-profile-wrapper">
+						<div class="col-md-3 user-profile-sidebar m-bottom-md">
+							<div class="row">
+								<div class="col-sm-4 col-md-12">
+									<div class="user-profile-pic">
+										<img  th:src="@{'/image/head/'+${userProfile.id}}"  alt=""></img>
+									</div>
+								</div>
+								<div class="col-sm-6 col-md-12">
+									<div th:if="${session.user.id} != ${userProfile.id}" class="user-name m-top-sm"><span th:text="${uu.nickName}"></span> <i class="fa fa-circle text-success m-left-xs font-14"></i></div>
+									<div th:if="${session.user.id} == ${userProfile.id}" class="user-name m-top-sm"><span th:text="${session.user.nickName}"></span> <i class="fa fa-circle text-success m-left-xs font-14"></i></div>
+
+									<div class="m-top-sm">
+										<div>
+											<i class="fa fa-map-marker user-profile-icon"></i>
+											<span th:text=" ${userProfile.position}"></span>
+										</div>
+
+										<div class="m-top-xs">
+											<i class="fa fa-briefcase user-profile-icon"></i>
+											<span th:text=" ${userProfile.industry}"></span>
+										</div>
+									</div>
+
+									<div class="m-top-sm text-centers" th:if="${session.user.id} == ${userProfile.id}">
+										<a class="btn btn-info" th:href="@{/user/profile/edit}"><i class="fa fa-edit m-right-xs"></i>编辑信息</a>
+									</div>
+
+									<h4 class="m-top-md m-bottom-sm">关于我</h4>
+									<p class="m-top-sm" th:text=" ${userProfile.aboutMe}">
+									</p>
+								</div>
+							</div><!-- ./row -->
+						</div><!-- ./col -->
+						<div class="col-md-9">
+							<div class="smart-widget">
+								<div class="smart-widget-inner">
+									<ul class="nav nav-tabs tab-style2 tab-right bg-grey">
+								  		<li>
+								  			<a href="#profileTab3" data-toggle="tab">
+								  				<span class="icon-wrapper"><i class="fa fa-eye"></i></span>
+								  				<span class="text-wrapper">关注</span>
+								  			</a>
+								  		</li>		
+								  		<li>
+								  			<a href="#profileTab2" data-toggle="tab">
+								  				<span class="icon-wrapper"><i class="fa fa-book"></i></span>
+								  				<span class="text-wrapper">提问</span>
+								  			</a>
+								  		</li>
+								  		<li class="active">
+								  			<a href="#profileTab1" data-toggle="tab">
+								  				<span class="icon-wrapper"><i class="fa fa-trophy"></i></span>
+								  				<span class="text-wrapper">动态</span>
+								  			</a>
+								  		</li>
+									</ul>
+									<div class="smart-widget-body">
+										<div class="tab-content">
+											<div class="tab-pane fade in active" id="profileTab1">
+												<h4 class="header-text m-bottom-md">
+													我的动态
+												</h4>
+												<div th:each="article,articleState : ${articles}">
+													<div class="row" style="margin-left: -15px;">
+														<div class="col-md-6">
+														 <span >我赞同了文章</span>
+														</div><!-- ./panel -->
+														<div class="col-md-6">
+														 <span style="float: right;" th:text="${#calendars.format(article.likeDate,'MM') + '月' + #calendars.format(article.likeDate,'dd') + '日'}"></span>
+														</div><!-- ./panel -->
+														
+													</div><!-- ./row -->
+													<div class="blog-title">
+														<a class="text-upper" style="font-size: 20px;" th:text="${article.title}"  th:href="@{'/article/single/'+${article.id}}">title</a>
+			
+														<div class="text-muted font-12">
+															作者: <a th:href="@{'/user/profile/'+${article.author}}" th:text="${article.authorName}"></a>
+															来自话题: <a th:href="@{'/topic/'+ ${article.topic}}" th:text="${article.topicName}"></a>
+															<span class="m-left-xs m-right-xs">|</span>
+															<span><i class="fa fa-comments"></i> <span th:text="${article.comments}"> </span> 条回答</span>
+														</div>
+													</div>
+													<hr/>
+												</div>
+											</div><!-- ./tab-pane -->
+											<div class="tab-pane fade" id="profileTab2">
+											<div th:each="article,articleState : ${myArticles}">
+												<div class="blog-title">
+														<a class="text-upper" style="font-size: 20px;" th:text="${article.title}"  th:href="@{'/article/single/'+${article.id}}">title</a>
+														<div class="text-muted font-12">
+															作者: <a th:href="@{'/user/profile/'+${article.author}}" th:text="${article.authorName}"></a>
+															来自话题: <a th:href="@{'/topic/'+ ${article.topic}}" th:text="${article.topicName}"></a>
+															<span class="m-left-xs m-right-xs">|</span>
+															<span><i class="fa fa-comments"></i> <span th:text="${article.comments}"> </span> 条回答</span>
+														</div>
+														<div class="col-md-6 pull-right">
+													<button style="float: right;" class="btn btn-xs btn-danger" th:onclick="'JavaScript:deleteArticle(\''+${article.id}+'\')'">删除</button>
+													</div>
+													</div>
+													<script type="text/javascript">
+													 function deleteArticle(id){
+													  		 $.get("/admin/deleteArticle",{id:id},function(data){
+													  			 
+																alert("删除成功!");  			 
+																location.reload();
+													  		 });
+													  	 }
+													</script>			 
+													<hr/>
+											</div>
+											
+											</div><!-- ./tab-pane -->
+											<div class="tab-pane fade" id="profileTab3">
+												<div class="profile-follower-list clearfix">
+													<ul>
+														<li th:each="myFollow,myFollowState : ${myFollows}"  >
+															<div class="panel panel-default clearfix">
+																<div class="panel-body">
+																	<div class="user-wrapper">
+																		<div class="user-avatar">
+																			<img class="small-img img-circle img-thumbnail" th:src="@{'/image/head/'+${myFollow.id}}" alt=""></img>
+																		</div>
+																		<div class="user-detail small-img">
+																			<div class="font-16" th:text="${myFollow.nickName}">Karen Martin</div>
+																			<small class="block text-muted font-12" th:text="${myFollow.industry}">Web Designer</small>
+
+																			<div class="m-top-sm">
+																				<a type="button" class="btn btn-success btn-sm marginTB-xs" th:href="@{'/user/profile/'+${myFollow.id}}" data-toggle="modal">View Profile</a>
+																			</div>
+																		</div>
+																	</div><!-- ./user-wrapper -->
+																</div>
+															</div>
+														</li>
+
+													</ul>
+												</div><!-- ./profile-follower-list -->
+											</div><!-- ./tab-pane -->
+										</div><!-- ./tab-content -->
+									</div><!-- ./smart-widget-body -->
+								</div><!-- ./smart-widget-inner -->
+							</div><!-- ./smart-widget -->
+						</div>
+					</div>
+				</div><!-- ./padding-md -->
+			</div><!-- /main-container -->
+		</div><!-- /wrapper -->
+
+		<a href="#" class="scroll-to-top hidden-print"><i class="fa fa-chevron-up fa-lg"></i></a>
+  	</body>
+  	
+  	
+  	
+  	
+</html>

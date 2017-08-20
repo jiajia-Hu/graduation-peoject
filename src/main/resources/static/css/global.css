@@ -1,0 +1,14 @@
+@font-face { 
+  font-family: fontawesome; /*这里是说明调用来的字体名字*/ 
+  src: url('../fonts/FontAwesome.otf'); /*这里是字体文件路径*/ 
+} 
+
+
+html,
+body {
+	font: 14px/1.5 "Microsoft Yahei", arial, "Hiragino Sans GB", sans-serif;
+}
+
+.linopoint{
+	list-style-type:none;
+}

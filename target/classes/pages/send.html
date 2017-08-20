@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" >
+  	<head  th:substituteby ="include/link">
+  	</head>
+  	<script th:inline="javascript">
+  			var userId = 0;
+  	
+			$(function(){
+				
+				$("#checkName").click(function(){
+					check();
+				});
+				
+				$("#receiveUser").blur(function(){
+					check();
+				});
+				
+				
+				function check (){
+					var $receiveUser = $("#receiveUser");
+					if($receiveUser.val() === ""){
+						alert("check success!");
+						return ;
+					}
+					
+					$.get([[@{/message/checkName}]],{nickName : $receiveUser.val()},function(data){
+						if(data === ""){
+							alert("用户不存在,请检查昵称");
+						}else{
+							$("#recId").val(data.id);
+						}
+					});
+					
+				}
+				
+			});
+		</script>
+
+  	<body class="overflow-hidden">
+		<div class="wrapper preload no-footer">
+			<div th:substituteby ="include/header :: #top_header"></div>
+			
+			<div class="main-container">	
+				<div class="inbox-wrapper">
+					<div class="inbox-menu">
+						<div class="inbox-menu-inner" >
+							<ul >
+								<li class="active">
+									<a th:href="@{/message/send}">
+										发送私信
+									</a>
+								</li>
+								<li th:class="${page=='inbox'?'active':''}">
+									<a th:href="@{/message/inbox}">
+										<span class="badge badge-success m-right-xs" th:if="${unread>0}" th:text="${unread}">0</span>
+										收件箱
+									</a>
+								</li>
+								<li th:class="${page=='send'?'active':''}"  >
+									<a th:href="@{/message/inbox/send}">
+										发送的
+									</a>
+								</li>
+									<li th:class="${page=='notice'?'active':''}"  >
+									<a th:href="@{/message/inbox/notice}">
+										公告
+									</a>
+								</li>
+							</ul>
+						</div><!-- ./inbox-menu-inner -->
+						<!--</div>-->
+					</div><!-- ./inbox-menu -->
+				
+					<div class="inbox-body padding-md">
+						<div class="smart-widget m-top-lg widget-dark-blue">
+							<div class="smart-widget-header" style="background-color: #23b7e5;">
+								发送私信
+							</div>
+							<div class="smart-widget-inner">
+								<div class="smart-widget-body">
+									<form th:action="@{/message/send}" method="post" >
+										<input type="hidden" name="recId" id="recId"></input>
+										<div class="form-group">
+											<label for="receive">接收人</label>
+											<div class="input-group">
+												<span class="input-group-addon">@</span>
+												<input type="text" class="form-control" name="receiveUser" id="receiveUser" placeholder="接收人昵称"/>
+												<span class="input-group-btn">
+													<button class="btn btn-default" type="button" id="checkName">检查用户!</button>
+												</span>
+											</div>
+										</div>
+										<!-- /form-group -->
+										<div class="form-group">
+											<label for="title">标题</label> 
+											<input  class="form-control" id="title" name="title" placeholder="标题" />
+										</div>
+										<div class="form-group">
+											<label for="content">私信内容</label>
+											<textarea class="form-control" rows="6" id="message" name="message" placeholder="私信内容"></textarea>
+										</div><!-- /form-group -->
+										<button type="submit" class="btn btn-success btn-sm"  >发送</button>
+									</form>
+								</div>
+							</div><!-- ./smart-widget-inner -->
+						</div><!-- ./smart-widget -->
+					</div><!-- ./inbox-body -->
+				</div><!-- ./inbox-wrapper -->
+			</div><!-- /main-container -->
+		</div><!-- /wrapper -->
+		<a href="#" class="scroll-to-top hidden-print"><i class="fa fa-chevron-up fa-lg"></i></a>
+  	</body>
+</html>

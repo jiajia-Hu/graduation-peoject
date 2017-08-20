@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" 
+ 				 xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4 " >
+  	<head>
+	    <meta charset="utf-8"></meta>
+	    <!-- Bootstrap core CSS -->
+	   	<link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet"></link>
+		<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet"></link>
+		<link th:href="@{/css/ionicons.min.css}" rel="stylesheet"></link>
+		<link th:href="@{/css/simplify.css}" rel="stylesheet"></link>
+		
+  	</head>
+
+  	<body class="overflow-hidden light-background">
+		<div class="wrapper no-navigation preload">
+			<div class="sign-in-wrapper">
+				<div class="sign-in-inner">
+					<div class="login-brand text-center">
+						山楂问答管理后台
+					</div>
+				<span style="text-align: center;width: 100%;display: block;" th:text="${error}"></span>
+					<form th:action="@{/admin/signin}" method="post">
+						<div class="form-group m-bottom-md">
+							<input type="text" class="form-control" name="username" placeholder="请输入用户名"></input>
+						</div>
+						<div class="form-group">
+							<input type="password" class="form-control" name="passowrd" placeholder="请输入密码"></input>
+						</div>
+
+
+						<div class="m-top-md p-top-sm">
+							<input type="submit" class="btn btn-success block" value="登 录"></input>
+						</div>
+
+					</form>
+				</div><!-- ./sign-in-inner -->
+			</div><!-- ./sign-in-wrapper -->
+		</div><!-- /wrapper -->
+
+  	</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" >
+  	<head  th:substituteby ="include/link">
+  	</head>
+  	<script th:inline="javascript">
+			$(function()	{
+				$('.inbox-check').click(function()	{
+					var activeRow = $(this).parent().parent().parent();
+					activeRow.toggleClass('active');			
+				});
+
+				
+				$('#inboxCollapse').click(function()	{
+					$('.inbox-menu-inner').slideToggle();
+				});
+
+				$('#chkAll').click(function()	{
+					if($(this).prop('checked'))	{
+						$('.inbox-check').prop('checked',true);
+						$('.inbox-check').parent().parent().parent().addClass('active');
+					}
+					else	{
+						$('.inbox-check').prop('checked',false);
+						$('.inbox-check').parent().parent().parent().removeClass('active');
+					}
+				});
+
+				$(window).resize(function() {
+					if (Modernizr.mq('(min-width: 980px)')) {
+						$('.inbox-menu ul').show();
+					}
+				});
+				
+				$(".collectIcon").click(function(){
+					var $item = $(this);
+					var $child = $item .children();
+					$.get([[@{/message/collect}]],{id:$item.attr("id").replace("collect","")},function(data){
+						if(data>0){
+							if($child.hasClass("fa-star-o")){
+								$child.removeClass("fa-star-o");
+								$child.addClass("fa-star text-warning");
+							}else{
+								$child.addClass("fa-star-o");
+								$child.removeClass("fa-star text-warning");
+							}
+						}else{
+							alert("收藏失败!");
+							
+						}
+					});
+					
+				});
+				
+				$("#deleteBtn").click(function(){
+					$("input[type='checkbox'][name='chk']:checked")
+					
+				});
+			  	 var $table = $('#dataTable');
+			  	 setTimeout(function(){
+			  		 $.get("/message/messages",{flag:$("#pageFlag").val()},function(data){
+			  			 
+			  			for (x in data)
+			  			{
+			  				var obj = data[x];
+			  				var da =  new Date(obj.sendDate);
+			  			    var year = da.getFullYear()+'年';
+			  			    var month = da.getMonth()+1+'月';
+			  			    var date = da.getDate()+'日';
+			  				
+			  				obj.sendDate = [year,month,date].join('-');
+			  				if(obj.status == "1"){
+				  				obj.statusText = "已读"
+			  				}else{
+			  					
+				  				obj.statusText = "未读"
+			  					
+			  				}
+			  				obj.operate = '<button class="btn btn-primary btn-xs" onclick="cancel('+obj.id+')">删除</button>';
+			  			}
+			  			$table.bootstrapTable('load',data);
+			  			$table.off('click-cell.bs.table');
+			  			$table.on('click-cell.bs.table',function(field, value, row, $element){
+			  				
+			  				if(value != "title"){
+			  					return;
+			  				}
+			  				$("#title").val($element.title);
+			  				$("#sender").val($element.nickName);
+			  				$("#content").val($element.message);
+			  				
+			  				$("#openBtn").click();
+			  				
+			  				 $.get("/message/read",{id:$element.id},function(data){
+			  					 
+			  					 
+							 });
+			  				
+			  			});
+			  		 });
+			  		 
+			  	 },0);
+				
+			});
+			
+			function cancel(id){
+				
+				 $.get("/message/delete",{id:id},function(data){
+					 
+					 alert("删除成功!");
+					 location.reload();
+				 });
+				
+			}
+		</script>
+
+  	<body class="overflow-hidden">
+		<div class="wrapper preload no-footer">
+			<div th:substituteby ="include/header :: #top_header"></div>
+			<input type="hidden" th:value="${page}" id="pageFlag"></input>
+			<div class="main-container">	
+				<div class="inbox-wrapper">
+					<div class="inbox-menu">
+						<div class="inbox-menu-inner" >
+							<ul >
+								<li >
+									<a th:href="@{/message/send}">
+										发送私信
+									</a>
+								</li>
+								<li th:class="${page=='inbox'?'active':''}">
+									<a th:href="@{/message/inbox}">
+										<span class="badge badge-success m-right-xs" th:if="${unread>0}" th:text="${unread}" id="unread">0</span>
+										收件箱
+									</a>
+								</li>
+								<li th:class="${page=='send'?'active':''}"  >
+									<a th:href="@{/message/inbox/send}">
+										发送的
+									</a>
+								</li>
+								<li th:class="${page=='notice'?'active':''}"  >
+									<a th:href="@{/message/inbox/notice}">
+										公告
+									</a>
+								</li>
+<!-- 								<li th:class="${page=='collect'?'active':''}" > -->
+<!-- 									<a th:href="@{/message/inbox/collect}"> -->
+<!-- 										收藏的 -->
+<!-- 									</a> -->
+<!-- 								</li> -->
+							</ul>
+						</div><!-- ./inbox-menu-inner -->
+						<!--</div>-->
+					</div><!-- ./inbox-menu -->
+				
+					<div class="inbox-body padding-md" style="min-height: 200px">
+						<table id="dataTable" data-toggle="table" class="table table-striped"
+			               data-pagination="true"
+			               data-search="true">
+						<thead>
+							<tr>
+								<th  data-field="title">标题</th>
+								<th  data-field="nickName" th:if="${page != 'notice'}"><span th:text="${page=='inbox'?'发送人':'接收人'}">发送人</span></th>
+								<th  data-field="message">内容</th>
+								<th  data-field="sendDate">发送日期</th>
+								<th  data-field="statusText" th:if="${page == 'inbox'}">状态</th>
+								<th  data-field="operate" th:if="${page == 'inbox'}">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				
+
+					</div><!-- ./inbox-body -->
+				</div><!-- ./inbox-wrapper -->
+			</div><!-- /main-container -->
+		</div><!-- /wrapper -->
+		<button class="btn btn-success" data-toggle="modal" data-target="#myModal" style="display: none;" id="openBtn"></button>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							&times;
+						</button>
+						<h4 class="modal-title" id="myModalLabel">
+							私信详情
+						</h4>
+					</div>
+					<div class="modal-body" >
+					<form class="form-horizontal" role="form" >
+					  <div class="form-group">
+					    <label for="title" class="col-sm-2 control-label">标题</label>
+					    <div class="col-sm-10">
+					      <input readonly="readonly"  type="text" class="form-control" id="title" name ="title" placeholder=""></input>
+					    </div>
+					  </div>
+					  <div class="form-group" th:if="${page != 'notice'}">
+					    <label for="title" class="col-sm-2 control-label" th:text="${page == 'inbox' ? '发信人' : '接收人'}">发信人</label>
+					    <div class="col-sm-10">
+					      <input readonly="readonly"  type="text" class="form-control" id="sender" name ="sender" placeholder=""></input>
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <label for="content" class="col-sm-2 control-label">私信内容</label>
+					    <div class="col-sm-10">
+					      <textarea rows="8" readonly="readonly" class="form-control"  id="content" name="content" placeholder=""></textarea>
+					    </div>
+					  </div>
+					  <div class="form-group">
+					  </div>
+					</form>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal -->
+		</div>
+		<a href="#" class="scroll-to-top hidden-print"><i class="fa fa-chevron-up fa-lg"></i></a>
+  	</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4 ">
+<head th:substituteby="include/link"></head>
+
+
+<style>
+.inputstyle{
+    width:170px !important;
+	height:170px !important;
+    cursor: pointer !important;
+    position: absolute !important;
+    filter:alpha(opacity=0) !important;
+    -moz-opacity:0 !important;
+    opacity:0 !important; 
+  
+}
+
+
+</style>
+
+
+<script type="text/javascript">
+
+
+$(function(){
+	$('#img').change(function(){
+		var file = this.files[0]; //选择上传的文件
+		var r = new FileReader();
+		r.readAsDataURL(file); //Base64
+		$(r).load(function(){
+			$(".headImage").attr("src", this.result);
+			$("#img").hide();
+		});
+	});
+	
+});
+
+
+
+
+</script>
+
+<body class="overflow-hidden">
+	<div class="wrapper preload">
+		<div th:substituteby="include/header :: #top_header"></div>
+		<div class="main-container">
+			<div class="padding-md" style="width: 70%; margin-left: 15%">
+				<div class=" user-profile-wrapper">
+					<div class="col-md-12 user-profile-sidebar m-bottom-md">
+						<form class="form-horizontal" role="form" th:action="@{/user/profile/save}" method="post" enctype="multipart/form-data">
+						<div class="row">
+							<div class="col-md-4">
+								<div class="user-profile-pic">
+									<input id="img" type="file" accept="image/*" class="inputstyle" name="file" />
+									<img th:src="@{'/image/head/'+${session.user.id}}" class="headImage" alt=""></img>
+								</div>
+							</div>
+							
+							<div class="col-md-6" style="padding-top: 15%">
+								<div class="user-name"  th:text="${session.user.nickName}" style="height: 80%;font-size: 30px;"></div>
+							</div>
+							<div class="col-md-2" >
+								<a th:href="@{/user/profile}">返回我的首页></a>
+							</div>
+						</div>
+						<hr style="border: 1px solid #fff"/>
+							<div class="form-group">
+								<div class="col-md-3"></div>
+							 	<label  class="col-md-2 control-label">性别:</label>
+							    <div class="col-md-6">
+							    	<label class="checkbox-inline">
+    									<input th:field="*{userProfile.gender}" type="radio" id="gender1" name="gender" value="1"/>男
+  									 </label>
+							    	<label class="checkbox-inline">
+    									<input th:field="*{userProfile.gender}" type="radio" id="gender12" name="gender" value="0"/>女
+  									 </label>
+							    </div>
+							</div>
+							<div class="form-group" th:if="${session.user.nickName} == ''">
+								<div class="col-md-3"></div>
+								<label  class="col-md-2 control-label">昵称:</label>
+								<div class="col-sm-6">
+									<input type="text" class="form-control" id="nickName" name="nickName" placeholder="昵称,用于展示"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-md-3"></div>
+								<label  class="col-md-2 control-label">一句话介绍:</label>
+								<div class="col-sm-6">
+									<input type="text" class="form-control" id="introduction" name="introduction" th:value="${userProfile.introduction}"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-md-3"></div>
+								<label  class="col-md-2 control-label">居住地:</label>
+								<div class="col-sm-6">
+									<input type="text" class="form-control" id="position" name="position" th:value="${userProfile.position}"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-md-3"></div>
+								<label  class="col-md-2 control-label">职业:</label>
+								<div class="col-sm-6">
+									<input type="text" class="form-control" id="industry" name="industry" th:value="${userProfile.industry}"/>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<div class="col-md-3"></div>
+								<label  class="col-md-2 control-label">个人简介:</label>
+								<div class="col-sm-6">
+									<input type="text" class="form-control" id="aboutMe" name="aboutMe" th:value="${userProfile.aboutMe}"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-md-2"></div>
+								<div class="col-md-8">
+									<button type="submit" class="btn btn-success btn-block">保存</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<!-- ./padding-md -->
+		</div>
+		<!-- /main-container -->
+	</div>
+	<!-- /wrapper -->
+
+	<a href="#" class="scroll-to-top hidden-print"><i class="fa fa-chevron-up fa-lg"></i></a>
+
+
+</body>
+</html>

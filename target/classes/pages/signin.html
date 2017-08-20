@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  >
+<head>
+	<meta charset="utf-8"></meta>
+	<title>登录 - 山楂 - Hawthorn</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/style/register-login.css}"></link>
+</head>
+<body>
+<div id="box"></div>
+<div class="cent-box">
+	<div class="cent-box-header">
+		<h1 class="main-title hide">山楂</h1>
+		<h2 class="sub-title">生活热爱分享 - Hawthorn</h2>
+		
+		<h2   th:text="${SPRING_SECURITY_LAST_EXCEPTION}">test</h2>
+		
+	</div>
+
+	<div class="cont-main clearfix">
+		<div class="index-tab">
+			<div class="index-slide-nav">
+				<a th:href="@{/signin}" class="active">登录</a>
+				<a th:href="@{/signup}">注册</a>
+				<div class="slide-bar"></div>				
+			</div>
+		</div>
+		<span style="text-align: center;width: 100%;display: block;" th:text="${session.SIGNINERROR}"></span>
+		<form th:action="@{/signin}" method="post">
+			<div class="login form">
+				<div class="group">
+					<div class="group-ipt email">
+						<input type="text" name="username" id="username" class="ipt" placeholder="輸入用戶名" required="required" />
+					</div>
+					<div class="group-ipt password">
+						<input type="password" name="password" id="password" class="ipt" placeholder="输入您的登录密码" required="required" />
+					</div>
+					<div class="group-ipt verify">
+						<input type="text" name="verify" id="verify" class="ipt" placeholder="输入验证码" required="required" />
+						<img th:src="@{/validateCode}" class="imgcode" />
+					</div>
+				</div>
+			</div>
+	
+			<div class="button">
+				<button type="submit" class="login-btn register-btn" id="button">登录</button>
+			</div>
+		</form>
+		
+  <c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>  
+		<div class="remember clearfix">
+			<label class="remember-me"><span class="icon"><span class="zt"></span></span><input type="checkbox" name="remember-me" id="remember-me" class="remember-mecheck" checked="checked" />记住我</label>
+			<label class="forgot-password">
+				<a href="#">忘记密码？</a>
+			</label>
+		</div>
+	</div>
+</div>
+
+<div class="footer">
+	<p>山楂 - Hawthorn</p>
+</div>
+
+<script th:src='@{/js/particles.js}' type="text/javascript"></script>
+<script th:src='@{/js/background.js}' type="text/javascript"></script>
+<script th:src='@{/js/jquery.min.js}' type="text/javascript"></script>
+<script th:src='@{/js/layer/layer.js}' type="text/javascript"></script>
+<script th:inline="javascript">
+ 	$('.imgcode').hover(function(){
+		layer.tips("看不清？点击更换", '.verify', {
+        		time: 6000,
+        		tips: [2, "#3c3c3c"]
+    		})
+	},function(){
+		layer.closeAll('tips');
+	}).click(function(){
+		$(this).attr('src', [[@{/validateCode}]] + '?'+ Math.random());
+	});
+	$("#remember-me").click(function(){
+		var n = document.getElementById("remember-me").checked;
+		if(n){
+			$(".zt").show();
+		}else{
+			$(".zt").hide();
+		}
+	}); 
+</script>
+</body>
+</html>

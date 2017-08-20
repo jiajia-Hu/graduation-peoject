@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  >
+<head>
+	<meta charset="utf-8"></meta>
+	<link rel="stylesheet" type="text/css" th:href="@{/style/register-login.css}"></link>
+</head>
+<body>
+<div id="box"></div>
+<div class="cent-box register-box">
+	<div class="cent-box-header">
+		<h1 class="main-title hide">山楂</h1>
+		<h2 class="sub-title">生活热爱分享 - Hawthorn</h2>
+	</div>
+
+	<div class="cont-main clearfix">
+		<div class="index-tab">
+			<div class="index-slide-nav">
+				<a th:href="@{/signin}">登录</a>
+				<a th:href="@{/signup}" class="active">注册</a>
+				<div class="slide-bar slide-bar1"></div>				
+			</div>
+				<h6 id="promot" name="promot" ></h6>
+		</div>
+	<form th:action="@{/signup}" method="post">
+		<div class="login form">
+			<div class="group">
+				<div class="group-ipt email">
+					<input type="email" name="email" id="email" class="ipt" placeholder="邮箱地址" required="required" />
+				</div>
+				<div class="group-ipt user">
+					<input type="text" name="username" id="username" class="ipt" placeholder="选择一个用户名" required="required" />
+				</div>
+				<div class="group-ipt password">
+					<input type="password" name="password" id="password" class="ipt" placeholder="设置登录密码" required="required" />
+				</div>
+				<div class="group-ipt password1">
+					<input type="password" name="password1" id="password1" class="ipt" placeholder="重复密码" required="required" onblur="valify()"/>
+				</div>
+				<div class="group-ipt verify">
+					<input type="text" name="verify" id="verify" class="ipt" placeholder="输入验证码" required="required" />
+					<img th:src="@{/validateCode}" class="imgcode" />
+				</div>
+			</div>
+		</div>
+
+		<div class="button">
+			<button type="submit" class="login-btn register-btn" id="button">注册</button>
+		</div>
+	
+	</form>
+
+	</div>
+</div>
+
+<div class="footer">
+	<p>山楂 - Hawthorn</p>
+</div>
+
+
+<script th:src='@{/js/particles.js}' type="text/javascript"></script>
+<script th:src='@{/js/background.js}' type="text/javascript"></script>
+<script th:src='@{/js/jquery.min.js}' type="text/javascript"></script>
+<script th:src='@{/js/layer/layer.js}' type="text/javascript"></script>
+<script th:inline="javascript">
+ 	$('.imgcode').hover(function(){
+		layer.tips("看不清？点击更换", '.verify', {
+        		time: 6000,
+        		tips: [2, "#3c3c3c"]
+    		})
+	},function(){
+		layer.closeAll('tips');
+	}).click(function(){
+		$(this).attr('src', [[@{/validateCode}]] + '?'+ Math.random());
+	});
+ 	
+ 	function valify(){
+ 		var password = $("#password").val();
+ 		var password1 = $("#password1").val();
+ 		if(password != password1){
+ 			document.getElementById("promot").innerHTML ="两次密码输入不一致";
+ 		}
+ 	}
+ 	
+ 	
+</script>
+</body>
+</html>
